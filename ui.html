@@ -161,7 +161,6 @@
       messages.push({ content, isUser });
     }
 
-    // Auto-resize textarea as user types
     messageInput.addEventListener('input', function() {
       this.style.height = 'auto';
       const newHeight = Math.min(this.scrollHeight, window.innerHeight * 0.33 - 32);
@@ -182,13 +181,14 @@
       messageInput.style.height = 'auto';
 
       try {
+        //ai navigator
         const response = await fetch('http://localhost:8080/completion', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            prompt: `System: "do not include quotation marks, do not include explainations" ${systemPrompt.value.trim()}\nUser: ${content}\nAssistant:`,
+            prompt: `System: ${systemPrompt.value.trim()}\nUser: ${content}\nAssistant:`,
             temperature: 0.7,
             top_k: 40,
             top_p: 0.9,
@@ -197,17 +197,46 @@
           })
         });
 
+        //ollama
+        // const response = await fetch('http://localhost:11434/api/chat', {
+        //   method: 'POST',
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //   },
+        //   body: JSON.stringify({
+        //     model: 'llama2',
+        //     messages: [
+        //       {
+        //         role: 'system',
+        //         content: systemPrompt.value.trim()
+        //       },
+        //       {
+        //         role: 'user',
+        //         content: content
+        //       }
+        //     ],
+        //     stream: false
+        //   })
+        // });
+
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         const data = await response.json();
         
+        // Handle AI Navigator response format
         if (data.content) {
           addMessage(data.content.trim(), false);
-        } else {
-          throw new Error('Invalid response format');
         }
+
+        // Handle Ollama response format
+        // if (data.message && data.message.content) {
+        //   addMessage(data.message.content.trim(), false);
+        // } else {
+        //   throw new Error('Invalid response format');
+        // }
+
       } catch (error) {
         console.error('Error:', error);
         addMessage('Something went wrong. Please try again.', false);

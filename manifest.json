@@ -7,7 +7,11 @@
   "editorType": ["figma"],
   "networkAccess": {
     "allowedDomains": ["none"],
-    "devAllowedDomains": ["http://localhost:8080"],
+    "devAllowedDomains": 
+    [
+      "http://localhost:8080",
+      "http://localhost:11434"
+    ],
     "reasoning": "The plugin needs to communicate with a local AI server for development and testing purposes."
   }
 }
