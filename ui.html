@@ -182,42 +182,42 @@
 
       try {
         //ai navigator
-        const response = await fetch('http://localhost:8080/completion', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            prompt: `System: ${systemPrompt.value.trim()}\nUser: ${content}\nAssistant:`,
-            temperature: 0.7,
-            top_k: 40,
-            top_p: 0.9,
-            n_predict: 200,
-            stop: ["</s>", "User:", "Assistant:", "System:"]
-          })
-        });
-
-        //ollama
-        // const response = await fetch('http://localhost:11434/api/chat', {
+        // const response = await fetch('http://localhost:8080/completion', {
         //   method: 'POST',
         //   headers: {
         //     'Content-Type': 'application/json',
         //   },
         //   body: JSON.stringify({
-        //     model: 'llama2',
-        //     messages: [
-        //       {
-        //         role: 'system',
-        //         content: systemPrompt.value.trim()
-        //       },
-        //       {
-        //         role: 'user',
-        //         content: content
-        //       }
-        //     ],
-        //     stream: false
+        //     prompt: `System: ${systemPrompt.value.trim()}\nUser: ${content}\nAssistant:`,
+        //     temperature: 0.7,
+        //     top_k: 40,
+        //     top_p: 0.9,
+        //     n_predict: 200,
+        //     stop: ["</s>", "User:", "Assistant:", "System:"]
         //   })
         // });
+
+        //ollama
+        const response = await fetch('http://localhost:11434/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: 'llama2',
+            messages: [
+              {
+                role: 'system',
+                content: systemPrompt.value.trim()
+              },
+              {
+                role: 'user',
+                content: content
+              }
+            ],
+            stream: false
+          })
+        });
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -226,16 +226,16 @@
         const data = await response.json();
         
         // Handle AI Navigator response format
-        if (data.content) {
-          addMessage(data.content.trim(), false);
-        }
+        // if (data.content) {
+        //   addMessage(data.content.trim(), false);
+        // }
 
         // Handle Ollama response format
-        // if (data.message && data.message.content) {
-        //   addMessage(data.message.content.trim(), false);
-        // } else {
-        //   throw new Error('Invalid response format');
-        // }
+        if (data.message && data.message.content) {
+          addMessage(data.message.content.trim(), false);
+        } else {
+          throw new Error('Invalid response format');
+        }
 
       } catch (error) {
         console.error('Error:', error);
