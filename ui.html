@@ -14,6 +14,7 @@
       display: flex;
       flex-direction: column;
       height: 100%;
+      position: relative;
     }
     
     .header {
@@ -120,6 +121,108 @@
       opacity: 0.5;
       cursor: not-allowed;
     }
+
+    /* Toast Styling */
+    .toast-container {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    .toast {
+      padding: 12px 16px;
+      border-radius: 4px;
+      font-size: 10pt;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      animation: slideInUp 0.3s ease, fadeOut 0.3s ease 4.7s;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .toast.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .error-toast {
+      background: #FFEFEF;
+      border-left: 4px solid #FF4D4D;
+      color: #D32F2F;
+    }
+
+    .toast-icon {
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .toast-message {
+      flex: 1;
+    }
+
+    .toast-close {
+      cursor: pointer;
+      font-size: 14px;
+      color: #60636A;
+    }
+
+    /* Empty state styling */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      opacity: 0.9;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .empty-state svg {
+      margin-bottom: 20px;
+    }
+
+    .empty-state-text {
+      color: #60636A;
+      font-size: 14px;
+      max-width: 300px;
+      line-height: 1.5;
+    }
+
+    .messages:empty::before {
+      content: "";
+      display: block;
+      height: 100%;
+    }
+
+    @keyframes slideInUp {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeOut {
+      from {
+        opacity: 1;
+      }
+      to {
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 <body>
@@ -132,7 +235,31 @@
         placeholder="Enter system instructions here..."
       >You are a UX copy writer and your goal is to rewrite all text with UX best practices in mind.</textarea>
     </div>
-    <div class="messages" id="messages"></div>
+    <div class="messages" id="messages">
+      <div class="empty-state" id="emptyState">
+        <svg width="280" height="280" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="400" fill="white"/>
+          <path d="M201.159 309.002C243.387 309.002 277.619 306.872 277.619 304.245C277.619 301.618 243.387 299.489 201.159 299.489C158.931 299.489 124.698 301.618 124.698 304.245C124.698 306.872 158.931 309.002 201.159 309.002Z" fill="#E6E8EC"/>
+          <path d="M310.469 146.281C310.469 151.177 306.501 155.145 301.605 155.145C306.501 155.145 310.469 159.113 310.469 164.008C310.469 159.113 314.437 155.145 319.333 155.145C314.437 155.145 310.469 151.177 310.469 146.281Z" stroke="#2C2C2C" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M228.342 136.295C218.473 122.266 202.191 113.141 183.762 113.141C154.472 113.141 130.609 136.238 129.334 165.174C111.996 171.303 99.5547 187.812 99.5547 207.253C99.5547 231.86 119.521 251.833 144.135 251.833H258.065C279.958 251.833 297.692 234.085 297.692 212.206C297.692 197.001 289.126 183.787 276.557 177.162C277.421 174.13 277.882 170.935 277.882 167.626C277.882 148.453 262.38 132.951 243.207 132.951C237.879 132.951 232.841 134.155 228.349 136.295H228.342Z" fill="white" stroke="#2C2C2C" stroke-linejoin="round"/>
+          <path d="M99.8655 243.566C99.8655 248.462 95.8978 252.43 91.002 252.43C95.8978 252.43 99.8655 256.398 99.8655 261.294C99.8655 256.398 103.833 252.43 108.729 252.43C103.833 252.43 99.8655 248.462 99.8655 243.566Z" stroke="#2C2C2C" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M286.466 256.418C286.466 261.314 282.498 265.282 277.603 265.282C282.498 265.282 286.466 269.249 286.466 274.145C286.466 269.249 290.434 265.282 295.33 265.282C290.434 265.282 286.466 261.314 286.466 256.418Z" stroke="#2C2C2C" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M135.148 80C135.148 84.8959 131.18 88.8636 126.284 88.8636C131.18 88.8636 135.148 92.8313 135.148 97.7272C135.148 92.8313 139.115 88.8636 144.011 88.8636C139.115 88.8636 135.148 84.8959 135.148 80Z" stroke="#2C2C2C" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M275.947 194.253C281.487 189.109 288.856 185 297.904 185C306.951 185 314.313 189.109 319.854 194.253C325.394 199.397 329.093 205.561 330.807 209.678C329.093 213.787 325.401 219.958 319.854 225.102C314.313 230.246 306.951 234.355 297.904 234.355C288.856 234.355 281.487 230.246 275.947 225.102C270.406 219.958 266.708 213.794 265 209.678C266.708 205.568 270.413 199.397 275.947 194.253Z" fill="#E6E8EC" stroke="#2C2C2C" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M297.904 223.417C305.491 223.417 311.642 217.267 311.642 209.679C311.642 202.092 305.491 195.941 297.904 195.941C290.317 195.941 284.166 202.092 284.166 209.679C284.166 217.267 290.317 223.417 297.904 223.417Z" fill="#2C2C2C" stroke="#2C2C2C" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M275.947 194.253C281.487 189.109 288.856 185 297.904 185C306.951 185 314.313 189.109 319.854 194.253C325.394 199.397 329.093 205.561 330.807 209.678C329.093 213.787 325.401 219.958 319.854 225.102C314.313 230.246 306.951 234.355 297.904 234.355C288.856 234.355 281.487 230.246 275.947 225.102C270.406 219.958 266.708 213.794 265 209.678C266.708 205.568 270.413 199.397 275.947 194.253Z" stroke="#2C2C2C" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M297.904 223.417C305.491 223.417 311.642 217.267 311.642 209.679C311.642 202.092 305.491 195.941 297.904 195.941C290.317 195.941 284.166 202.092 284.166 209.679C284.166 217.267 290.317 223.417 297.904 223.417Z" stroke="#2C2C2C" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M134.112 139H76.6864C71.889 139 68 142.889 68 147.686V185.861C68 190.659 71.889 194.548 76.6864 194.548H134.112C138.909 194.548 142.798 190.659 142.798 185.861V147.686C142.798 142.889 138.909 139 134.112 139Z" fill="#E6E8EC" stroke="#2C2C2C" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M90.7008 168.052H82.1702V186.864H90.7008V168.052Z" fill="#2C2C2C" stroke="#2C2C2C" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M109.122 158.13H100.592V186.917H109.122V158.13Z" fill="#2C2C2C" stroke="#2C2C2C" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M127.543 146.087H119.013V186.841H127.543V146.087Z" fill="#2C2C2C" stroke="#2C2C2C" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M221.686 237.893L230.141 232.346L218.305 214.82L209.851 220.367L221.686 237.893Z" fill="white" stroke="#2C2C2C" stroke-miterlimit="10"/>
+          <path d="M258.925 270.925L258.923 270.922L255.677 265.941L255.677 265.941L233.946 232.626C233.946 232.626 233.945 232.625 233.945 232.625C233.733 232.302 233.459 232.025 233.139 231.808C232.819 231.591 232.459 231.44 232.08 231.362C231.701 231.284 231.31 231.282 230.931 231.355C230.551 231.429 230.19 231.576 229.867 231.79L229.866 231.791L225.386 234.731L225.383 234.732L221.816 237.049C221.815 237.049 221.815 237.05 221.814 237.05C221.162 237.481 220.707 238.152 220.549 238.917C220.391 239.683 220.542 240.48 220.971 241.134L220.971 241.135L245.962 279.427C245.963 279.427 245.963 279.427 245.963 279.428C246.393 280.08 247.064 280.537 247.829 280.697C248.595 280.858 249.392 280.709 250.048 280.285C250.049 280.284 250.049 280.284 250.05 280.284L258.079 275.003L258.081 275.002C258.406 274.791 258.685 274.518 258.903 274.198C259.121 273.878 259.274 273.519 259.352 273.14C259.431 272.761 259.434 272.37 259.36 271.99C259.287 271.61 259.139 271.248 258.925 270.925Z" fill="#2C2C2C" stroke="#2C2C2C"/>
+          <path d="M159.143 210.095C154.373 202.824 151.866 194.301 151.94 185.605C152.014 176.909 154.664 168.43 159.557 161.241C164.449 154.051 171.364 148.474 179.426 145.214C187.488 141.954 196.336 141.158 204.851 142.927C213.366 144.696 221.164 148.949 227.262 155.15C233.359 161.351 237.48 169.221 239.104 177.765C240.728 186.308 239.783 195.141 236.387 203.147C232.991 211.153 227.298 217.972 220.026 222.742C215.199 225.91 209.794 228.096 204.121 229.175C198.449 230.254 192.619 230.205 186.965 229.03C181.311 227.856 175.944 225.579 171.171 222.33C166.397 219.081 162.31 214.924 159.143 210.095ZM214.851 214.854C220.561 211.107 225.032 205.751 227.698 199.463C230.364 193.175 231.105 186.238 229.829 179.529C228.553 172.82 225.315 166.639 220.527 161.77C215.738 156.9 209.613 153.56 202.926 152.172C196.239 150.783 189.29 151.409 182.959 153.969C176.627 156.53 171.197 160.91 167.355 166.557C163.513 172.203 161.432 178.862 161.374 185.692C161.317 192.521 163.286 199.214 167.032 204.924C172.057 212.582 179.918 217.93 188.885 219.792C197.853 221.654 207.193 219.878 214.851 214.854Z" fill="#E6E8EC" stroke="#2C2C2C" stroke-miterlimit="10"/>
+        </svg>
+        <p class="empty-state-text">Type a message to get started with your AI-powered UX writing assistant.</p>
+      </div>
+    </div>
     <div class="input-container">
       <textarea 
         class="message-input" 
@@ -142,6 +269,7 @@
       ></textarea>
       <button id="sendButton">Send</button>
     </div>
+    <div class="toast-container" id="toastContainer"></div>
   </div>
 
   <script>
@@ -150,15 +278,42 @@
     const messageInput = document.getElementById('messageInput');
     const sendButton = document.getElementById('sendButton');
     const systemPrompt = document.getElementById('systemPrompt');
+    const toastContainer = document.getElementById('toastContainer');
     let isProcessing = false;
 
     function addMessage(content, isUser) {
+      // Hide empty state when first message is added
+      const emptyState = document.getElementById('emptyState');
+      if (emptyState && messages.length === 0) {
+        emptyState.style.display = 'none';
+      }
+      
       const messageDiv = document.createElement('div');
       messageDiv.className = `message ${isUser ? 'user-message' : 'assistant-message'}`;
       messageDiv.textContent = content;
       messagesContainer.appendChild(messageDiv);
       messagesContainer.scrollTop = messagesContainer.scrollHeight;
       messages.push({ content, isUser });
+    }
+
+    function showErrorToast(message) {
+      const toast = document.createElement('div');
+      toast.className = 'toast error-toast';
+      toast.innerHTML = `
+        <span class="toast-icon">!</span>
+        <span class="toast-message">${message}</span>
+        <span class="toast-close" onclick="this.parentElement.remove()">×</span>
+      `;
+      toastContainer.appendChild(toast);
+      
+      // Force reflow to trigger the animation
+      void toast.offsetWidth;
+      toast.classList.add('visible');
+      
+      // Remove the toast after 5 seconds
+      setTimeout(() => {
+        toast.remove();
+      }, 5000);
     }
 
     messageInput.addEventListener('input', function() {
@@ -182,42 +337,42 @@
 
       try {
         //ai navigator
-        // const response = await fetch('http://localhost:8080/completion', {
-        //   method: 'POST',
-        //   headers: {
-        //     'Content-Type': 'application/json',
-        //   },
-        //   body: JSON.stringify({
-        //     prompt: `System: ${systemPrompt.value.trim()}\nUser: ${content}\nAssistant:`,
-        //     temperature: 0.7,
-        //     top_k: 40,
-        //     top_p: 0.9,
-        //     n_predict: 200,
-        //     stop: ["</s>", "User:", "Assistant:", "System:"]
-        //   })
-        // });
-
-        //ollama
-        const response = await fetch('http://localhost:11434/api/chat', {
+        const response = await fetch('http://localhost:8080/completion', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            model: 'llama2',
-            messages: [
-              {
-                role: 'system',
-                content: systemPrompt.value.trim()
-              },
-              {
-                role: 'user',
-                content: content
-              }
-            ],
-            stream: false
+            prompt: `System: ${systemPrompt.value.trim()}\nUser: ${content}\nAssistant:`,
+            temperature: 0.7,
+            top_k: 40,
+            top_p: 0.9,
+            n_predict: 200,
+            stop: ["</s>", "User:", "Assistant:", "System:"]
           })
         });
+
+        //ollama
+        // const response = await fetch('http://localhost:11434/api/chat', {
+        //   method: 'POST',
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //   },
+        //   body: JSON.stringify({
+        //     model: 'llama2',
+        //     messages: [
+        //       {
+        //         role: 'system',
+        //         content: systemPrompt.value.trim()
+        //       },
+        //       {
+        //         role: 'user',
+        //         content: content
+        //       }
+        //     ],
+        //     stream: false
+        //   })
+        // });
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -226,20 +381,20 @@
         const data = await response.json();
         
         // Handle AI Navigator response format
-        // if (data.content) {
-        //   addMessage(data.content.trim(), false);
-        // }
+        if (data.content) {
+          addMessage(data.content.trim(), false);
+        }
 
         // Handle Ollama response format
-        if (data.message && data.message.content) {
-          addMessage(data.message.content.trim(), false);
-        } else {
-          throw new Error('Invalid response format');
-        }
+        // if (data.message && data.message.content) {
+        //   addMessage(data.message.content.trim(), false);
+        // } else {
+        //   throw new Error('Invalid response format');
+        // }
 
       } catch (error) {
         console.error('Error:', error);
-        addMessage('Something went wrong. Please try again.', false);
+        showErrorToast('Error: No model loaded. Please load a model in AI Navigator in the API Server to get started.');
       } finally {
         isProcessing = false;
         sendButton.disabled = false;
